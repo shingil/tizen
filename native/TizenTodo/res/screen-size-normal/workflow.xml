@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Workflow>
+    <Scene Form="IDF_FORM" Id="IDSCN_1"/>
+    <Scene Form="IDF_DONE_FORM" Id="IDSCN_2"/>
+    <SceneTransition AnimationType="none" DestroyOption="keep" DirectionType="forward" HistoryOption="add" Id="ID_SCNT_1" Method="" SourceId="" SourceResourceType="" TargetId="IDSCN_1"/>
+    <SceneTransition AnimationType="none" DestroyOption="keep" DirectionType="forward" HistoryOption="add" Id="ID_SCNT_2" Method="OnActionPerformed" SourceId="IDSCN_1" SourceResourceType="IDF_FORM" TargetId="IDSCN_2"/>
+    <SceneTransition AnimationType="none" DestroyOption="keep" DirectionType="forward" HistoryOption="add" Id="ID_SCNT_3" Method="OnActionPerformed" SourceId="IDSCN_2" SourceResourceType="IDF_DONE_FORM" TargetId="IDSCN_1"/>
+</Workflow>
