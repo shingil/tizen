@@ -11,11 +11,8 @@ using namespace Tizen::Graphics;
 using namespace Tizen::Base::Collection;
 using namespace Tizen::Base::Utility;
 
-
-
 TizenTodoDoneForm::TizenTodoDoneForm(void) : __pDoneList(null)
 {
-
 }
 
 TizenTodoDoneForm::~TizenTodoDoneForm(void)
@@ -45,14 +42,13 @@ TizenTodoDoneForm::OnInitializing(void)
 		pButtonOk->AddActionEventListener(*this);
 	}
 
-	// create listview
-
+	// create list view
 	__pListView = static_cast<ListView*>(GetControl(L"IDC_LISTVIEW1"));
 	__pListView->SetItemProvider(*this);
 	__pListView->AddListViewItemEventListener(*this);
 	__pDoneList = new (std::nothrow) ArrayList();
 
-	// read done list from file
+	// read done works list from file
 	String strFileContents;
 	String filePath = App::GetInstance()->GetAppDataPath() + L"donelist.txt";
 
@@ -66,15 +62,12 @@ TizenTodoDoneForm::OnInitializing(void)
 	{
 		st.GetNextToken(token);
 		__pDoneList->Add(new (std::nothrow) String(token));
+		__pListView->UpdateList();
 	}
 
 	CreatePopup();
 
-	AppLog("shinigl Initializing");
-
 	return r;
-
-
 }
 
 result
@@ -96,40 +89,38 @@ TizenTodoDoneForm::OnTerminating(void)
 	return r;
 }
 
-
+/* Create Popup
+ * You can delete unnecessary done work.
+ * This popup has ok, cancel button.
+ */
 void
 TizenTodoDoneForm::CreatePopup(void) {
 	// create popup
-
 	__pPopup = new (std::nothrow) Popup();
-	__pPopup->Construct(true, Dimension(600, 750));
-	__pPopup->SetTitleText(L"Delete");
+	__pPopup->Construct(true, Dimension(600, 450));
+	__pPopup->SetTitleText(L"Delete the work ?");
 
 	Rectangle rect;
 	rect = __pPopup->GetClientAreaBounds();
 
-	// label
+	// create label
 	__pLabel = new (std::nothrow) Label();
-	__pLabel->Construct(Rectangle(50, 100, 500, 100), L"");
-
+	__pLabel->Construct(Rectangle(50, 50, 500, 100), L"");
 	__pPopup->AddControl(*__pLabel);
 
-	// ok button
+	// create "ok" button
 	Button *pButtonOK = new (std::nothrow) Button();
-	pButtonOK->Construct(Rectangle(100, 510, 150, 74), L"OK");
+	pButtonOK->Construct(Rectangle(50, 230, 150, 74), L"OK");
 	pButtonOK->SetActionId(ID_BUTTON_POPUP_OK);
 	pButtonOK->AddActionEventListener(*this);
-
 	__pPopup->AddControl(*pButtonOK);
 
-	// cancel button
+	// create "cancel" button
 	Button *pButtonCancel = new (std::nothrow) Button();
-	pButtonCancel->Construct(Rectangle(300, 510, 150, 74), L"Cancel");
+	pButtonCancel->Construct(Rectangle(350, 230, 150, 74), L"Cancel");
 	pButtonCancel->SetActionId(ID_BUTTON_POPUP_CANCEL);
 	pButtonCancel->AddActionEventListener(*this);
-
 	__pPopup->AddControl(*pButtonCancel);
-
 }
 
 
@@ -137,15 +128,12 @@ void
 TizenTodoDoneForm::OnSceneActivatedN(const Tizen::Ui::Scenes::SceneId& previousSceneId,
 								const Tizen::Ui::Scenes::SceneId& currentSceneId, Tizen::Base::Collection::IList* pArgs)
 {
-	AppLog("shingilk onsceneactivate %ls", __pDataIO->test2.GetPointer());
-
 	// TODO: Add your implementation codes here
-	if(!(__pDataIO->test2.IsEmpty())){
-			__pDoneList->Add(new String(__pDataIO->test2.GetPointer()));
+	if(!(__pDataIO->selectedDoneWork.IsEmpty())){
+			__pDoneList->Add(new String(__pDataIO->selectedDoneWork.GetPointer()));
 			__pListView->UpdateList();
-			__pDataIO->test2 = L"";
+			__pDataIO->selectedDoneWork = L"";
 	}
-
 }
 
 void
@@ -153,12 +141,11 @@ TizenTodoDoneForm::OnSceneDeactivated(const Tizen::Ui::Scenes::SceneId& currentS
 								const Tizen::Ui::Scenes::SceneId& nextSceneId)
 {
 	// TODO: Add your implementation codes here
-
 }
 
 void
 TizenTodoDoneForm::ShowPopup(Popup* __pPopup) {
-	String* done = static_cast<String*>(__pDoneList->GetAt(selectIndexForDone));
+	String* done = static_cast<String*>(__pDoneList->GetAt(selectIndex));
 	__pLabel->SetText(done->GetPointer());
 	__pPopup->SetShowState(true);
 	__pPopup->Show();
@@ -179,28 +166,31 @@ TizenTodoDoneForm::OnActionPerformed(const Tizen::Ui::Control& source, int actio
 
 	switch(actionId)
 	{
+	// go to todo screen.
 	case ID_BUTTON_TODO:
 		pSceneManager->GoForward(SceneTransitionId(L"ID_SCNT_3"));
 		break;
 
+	// remove done from list.
 	case ID_BUTTON_POPUP_OK:
-		// remove done to list
-		__pDoneList->RemoveAt(selectIndexForDone);
+		__pDoneList->RemoveAt(selectIndex);
 		__pListView->UpdateList();
 		HidePopup(__pPopup);
-
 		break;
 
 	case ID_BUTTON_POPUP_CANCEL:
+		// cancel to delete done.
 		HidePopup(__pPopup);
 		break;
 
 	default:
 		break;
 	}
-
 }
 
+/*
+ *  When user press back button, go to the before screen.
+ */
 void
 TizenTodoDoneForm::OnFormBackRequested(Tizen::Ui::Controls::Form& source)
 {
@@ -210,7 +200,7 @@ TizenTodoDoneForm::OnFormBackRequested(Tizen::Ui::Controls::Form& source)
 	pSceneManager->GoBackward(BackwardSceneTransition());
 }
 
-// IListViewItemEventListener
+
 void
 TizenTodoDoneForm::OnListViewContextItemStateChanged(
 			Tizen::Ui::Controls::ListView &listView, int index, int elementId,
@@ -223,8 +213,8 @@ TizenTodoDoneForm::OnListViewItemStateChanged(
 			Tizen::Ui::Controls::ListItemStatus status)
 {
 	if (status == LIST_ITEM_STATUS_SELECTED) {
+		selectIndex = index;
 		ShowPopup(__pPopup);
-		selectIndexForDone = index;
 	}
 }
 
@@ -234,7 +224,6 @@ TizenTodoDoneForm::OnListViewItemSwept(Tizen::Ui::Controls::ListView &listView,
 {
 }
 
-// IListViewItemProvider
 Tizen::Ui::Controls::ListItemBase* TizenTodoDoneForm::CreateItem(int index,
 			int itemWidth)
 {
@@ -242,14 +231,11 @@ Tizen::Ui::Controls::ListItemBase* TizenTodoDoneForm::CreateItem(int index,
 	AppAssert(pItem);
 
 	String* done = static_cast<String*>(__pDoneList->GetAt(index));
-	AppLog("CreateItem: String: %ls", done->GetPointer());
-	AppLog("CreateItem: String: index: %d", index);
 
 	pItem->Construct(Dimension(itemWidth, 50), LIST_ANNEX_STYLE_NORMAL);
 	pItem->SetElement(*done);
 
 	return pItem;
-
 }
 
 bool

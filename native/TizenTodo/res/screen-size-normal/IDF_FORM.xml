@@ -15,7 +15,7 @@
         <itemSet/>
     </Footer>
     <Header>
-        <property backgroundBitmapPath="" color="" colorOpacity="0" descriptionText="" descriptionTextColor="" disabledButtonColor="" disabledButtonColorOpacity="0" disabledButtonTextColor="" disabledItemColor="" disabledItemColorOpacity="0" disabledItemTextColor="" headerStyle="HEADER_STYLE_TITLE" highlightedButtonColor="" highlightedButtonColorOpacity="0" highlightedButtonTextColor="" highlightedItemColor="" highlightedItemColorOpacity="0" highlightedItemTextColor="" normalButtonColor="" normalButtonColorOpacity="0" normalButtonTextColor="" normalItemColor="" normalItemColorOpacity="0" normalItemTextColor="" pressedButtonColor="" pressedButtonColorOpacity="0" pressedButtonTextColor="" pressedItemColor="" pressedItemColorOpacity="0" pressedItemTextColor="" selectedItemColor="" selectedItemColorOpacity="0" selectedItemTextColor="" titleIconPath="" titleText="To DO" titleTextColor=""/>
+        <property backgroundBitmapPath="" color="" colorOpacity="0" descriptionText="" descriptionTextColor="" disabledButtonColor="" disabledButtonColorOpacity="0" disabledButtonTextColor="" disabledItemColor="" disabledItemColorOpacity="0" disabledItemTextColor="" headerStyle="HEADER_STYLE_TITLE" highlightedButtonColor="" highlightedButtonColorOpacity="0" highlightedButtonTextColor="" highlightedItemColor="" highlightedItemColorOpacity="0" highlightedItemTextColor="" normalButtonColor="" normalButtonColorOpacity="0" normalButtonTextColor="" normalItemColor="" normalItemColorOpacity="0" normalItemTextColor="" pressedButtonColor="" pressedButtonColorOpacity="0" pressedButtonTextColor="" pressedItemColor="" pressedItemColorOpacity="0" pressedItemTextColor="" selectedItemColor="" selectedItemColorOpacity="0" selectedItemTextColor="" titleIconPath="" titleText="To do" titleTextColor=""/>
         <itemSet/>
     </Header>
     <Button id="IDC_BUTTON_OK" parent="IDF_FORM">
@@ -30,7 +30,7 @@
     </Button>
     <ListView id="IDC_LISTVIEW" parent="IDF_FORM">
         <property backgroundBitmapPath="" backgroundColor="" backgroundColorOpacity="0" bitmapPathOfEmptyList="" colorOfEmptyListText="" fastScroll="false" itemDivider="true" itemDividerColor="" sweepEnabled="false" textOfEmptyList=""/>
-        <layout bottomRelation="" bottomRelationType="" centerHorizontal="false" centerVertical="false" height="847" horizontalFitPolicy="FIT_POLICY_FIXED" leftRelation="" leftRelationType="" marginBottom="0" marginLeft="0" marginRight="0" marginTop="0" mode="Portrait" rightRelation="" rightRelationType="" topRelation="" topRelationType="" verticalFitPolicy="FIT_POLICY_FIXED" width="640" x="34" y="132"/>
+        <layout bottomRelation="" bottomRelationType="" centerHorizontal="false" centerVertical="false" height="839" horizontalFitPolicy="FIT_POLICY_FIXED" leftRelation="" leftRelationType="" marginBottom="0" marginLeft="0" marginRight="0" marginTop="0" mode="Portrait" rightRelation="" rightRelationType="" topRelation="" topRelationType="" verticalFitPolicy="FIT_POLICY_FIXED" width="640" x="34" y="138"/>
         <layout bottomRelation="" bottomRelationType="" centerHorizontal="false" centerVertical="false" height="124" horizontalFitPolicy="FIT_POLICY_FIXED" leftRelation="" leftRelationType="" marginBottom="0" marginLeft="0" marginRight="0" marginTop="0" mode="Landscape" rightRelation="" rightRelationType="" topRelation="" topRelationType="" verticalFitPolicy="FIT_POLICY_FIXED" width="730" x="401" y="81"/>
     </ListView>
 </Scene>

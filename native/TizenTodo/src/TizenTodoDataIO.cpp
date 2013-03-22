@@ -9,8 +9,7 @@
 using namespace Tizen::Base;
 using namespace Tizen::Io;
 
-//wchar_t* DataIO::test=L"test";
-String TizenTodoDataIO::test2(L"");
+String TizenTodoDataIO::selectedDoneWork(L"");
 
 TizenTodoDataIO::TizenTodoDataIO() {
 	// TODO Auto-generated constructor stub
@@ -21,6 +20,7 @@ TizenTodoDataIO::~TizenTodoDataIO() {
 	// TODO Auto-generated destructor stub
 }
 
+/* Write string type contents to file */
 bool
 TizenTodoDataIO::WriteFile(const String& strFilePath, const String& strFileContents)
 {
@@ -42,6 +42,7 @@ TizenTodoDataIO::WriteFile(const String& strFilePath, const String& strFileConte
 	return true;
 }
 
+/* Read string type contents from file */
 bool
 TizenTodoDataIO::ReadFile(const String& strFilePath, String& strFileContents)
 {
@@ -68,18 +69,3 @@ TizenTodoDataIO::ReadFile(const String& strFilePath, String& strFileContents)
 
 	return true;
 }
-
-//String DataIO::doneWork = L"aabbb";
-
-//DataIO::SetDoneWork(int b)
-//{
-//	this->a= b;
-//}
-//
-//int
-//DataIO::GetDoneWork()
-//{
-//	return this->a;
-//}
-
-

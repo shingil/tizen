@@ -70,7 +70,7 @@ private:
 	Tizen::Ui::Controls::Label *__pLabel;
 	TizenTodoDataIO* __pDataIO;
 
-	int selectIndexForDone;
+	int selectIndex;
 };
 
 #endif

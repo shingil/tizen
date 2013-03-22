@@ -30,6 +30,7 @@ TizenTodoApp::CreateInstance(void)
 {
 	// Create the instance through the constructor.
 	return new TizenTodoApp();
+	AppLogDebug("Enter a log message");
 }
 
 bool
@@ -53,9 +54,6 @@ TizenTodoApp::OnAppInitializing(AppRegistry& appRegistry)
 bool
 TizenTodoApp::OnAppInitialized(void)
 {
-	// TODO:
-	// Comment.
-
 	// Create a Frame
 	TizenTodoFrame* pTizenTodoFrame = new TizenTodoFrame();
 	pTizenTodoFrame->Construct();
@@ -63,15 +61,11 @@ TizenTodoApp::OnAppInitialized(void)
 	AddFrame(*pTizenTodoFrame);
 
 	return true;
-
-
 }
 
 bool
 TizenTodoApp::OnAppWillTerminate(void)
 {
-	// TODO:
-	// Comment.
 	return true;
 }
 

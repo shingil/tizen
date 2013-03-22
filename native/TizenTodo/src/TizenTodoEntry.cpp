@@ -11,7 +11,6 @@ extern "C"
 {
 #endif // __cplusplus
 
-
 //
 // The entry function of Tizen application called by the operating system.
 //

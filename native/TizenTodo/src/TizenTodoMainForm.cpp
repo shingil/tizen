@@ -21,60 +21,53 @@ TizenTodoMainForm::~TizenTodoMainForm(void) {
 
 bool TizenTodoMainForm::Initialize(void) {
 	Construct(L"IDF_FORM");
-
 	return true;
 }
 
 result TizenTodoMainForm::OnInitializing(void) {
 	result r = E_SUCCESS;
 
-	// Setup back event listener
-	SetFormBackEventListener(this);
-
-	// Get a button via resource ID
-	Tizen::Ui::Controls::Button *pButtonOk = static_cast<Button*>(GetControl(
-			L"IDC_BUTTON_OK"));
+	// get a button via resource ID
+	Tizen::Ui::Controls::Button *pButtonOk = static_cast<Button*>(GetControl(L"IDC_BUTTON_OK"));
 	if (pButtonOk != null) {
 		pButtonOk->SetActionId(ID_BUTTON_CREATE);
 		pButtonOk->AddActionEventListener(*this);
 	}
 
-	Tizen::Ui::Controls::Button *pButton1 = static_cast<Button*>(GetControl(
-			L"IDC_BUTTON1"));
+	// create button
+	Tizen::Ui::Controls::Button *pButton1 = static_cast<Button*>(GetControl(L"IDC_BUTTON1"));
 	if (pButtonOk != null) {
 		pButton1->SetActionId(ID_BUTTON_DONE);
 		pButton1->AddActionEventListener(*this);
 	}
 
-	// create listview
+	// create list view
 	__pListView = static_cast<ListView*>(GetControl(L"IDC_LISTVIEW"));
 	__pListView->SetItemProvider(*this);
 	__pListView->AddListViewItemEventListener(*this);
-
-
 	__pTodosList = new (std::nothrow) ArrayList();
 
-	// read todos from file
+	// read todo works from file
 	String strFileContents;
 	String filePath = App::GetInstance()->GetAppDataPath() + L"todolist.txt";
 
 	__pDataIO = new (std::nothrow) TizenTodoDataIO();
 	__pDataIO->ReadFile(filePath, strFileContents);
 
-
 	StringTokenizer st(strFileContents, String(L"\n"));
 	String token;
-
 	while(st.HasMoreTokens())
 	{
 		st.GetNextToken(token);
 		__pTodosList->Add(new (std::nothrow) String(token));
 	}
 
+	//create popup
 	CreatePopup();
 	CreatePopup2();
 
-	AppLog("shingil oninit");
+	// setup back event listener
+	SetFormBackEventListener(this);
 
 	return r;
 }
@@ -94,87 +87,86 @@ result TizenTodoMainForm::OnTerminating(void) {
 
 	__pDataIO->WriteFile(filePath, strFileContents);
 
-	AppLog("TODO App Onterminationg is called");
-
-	// Add your termination code here
 	return r;
 }
 
-
+/*
+ * Create Popup
+ * When clicking "New" button, this popup appears.
+ * User can input todo work.
+ * This popup has text edit and Ok/Cancel buttons.
+ */
 void TizenTodoMainForm::CreatePopup(void) {
 	// create popup
-
 	__pPopup = new (std::nothrow) Popup();
-	__pPopup->Construct(true, Dimension(600, 750));
-	__pPopup->SetTitleText(L"Title");
+	__pPopup->Construct(true, Dimension(600, 450));
+	__pPopup->SetTitleText(L"Input to do");
 
 	Rectangle rect;
 	rect = __pPopup->GetClientAreaBounds();
 
-	// label
+	// create label
 	__pEditField = new (std::nothrow) EditField();
-	__pEditField->Construct(Rectangle(50, 100, 500, 100));
-
+	__pEditField->Construct(Rectangle(50, 50, 450, 100));
 	__pPopup->AddControl(*__pEditField);
 
-	// ok button
+	// create "ok" button
 	Button *pButtonOK = new (std::nothrow) Button();
-	pButtonOK->Construct(Rectangle(100, 510, 150, 74), L"OK");
+	pButtonOK->Construct(Rectangle(50, 230, 150, 74), L"OK");
 	pButtonOK->SetActionId(ID_BUTTON_POPUP_OK);
 	pButtonOK->AddActionEventListener(*this);
-
 	__pPopup->AddControl(*pButtonOK);
 
-	// cancel button
+	// create "cancel" button
 	Button *pButtonClose = new (std::nothrow) Button();
-	pButtonClose->Construct(Rectangle(300, 510, 150, 74), L"Cancel");
+	pButtonClose->Construct(Rectangle(350, 230, 150, 74), L"Cancel");
 	pButtonClose->SetActionId(ID_BUTTON_POPUP_CANCEL);
 	pButtonClose->AddActionEventListener(*this);
-
 	__pPopup->AddControl(*pButtonClose);
 
 }
 
+/*
+ * Create Popup
+ * When clicking list item in list view, this popup appears.
+ * User can delete todo work or move todo to done screen.
+ * This popup has text view and Done/Delete/Cancel buttons.
+ */
 void TizenTodoMainForm::CreatePopup2(void) {
 	// create popup
 	__pPopup2 = new (std::nothrow) Popup();
-	__pPopup2->Construct(true, Dimension(650, 750));
-	__pPopup2->SetTitleText(L"Title");
+	__pPopup2->Construct(true, Dimension(700, 450));
+	__pPopup2->SetTitleText(L"Finish or delete the work ?");
 
 	Rectangle rect;
 	rect = __pPopup2->GetClientAreaBounds();
 
-	// label
+	// create label
 	__pLabel = new (std::nothrow) Label();
-	__pLabel->Construct(Rectangle(50, 100, 500, 100),L"");
-
+	__pLabel->Construct(Rectangle(50, 50, 500, 100),L"");
 	__pPopup2->AddControl(*__pLabel);
 
-	// Done button
+	// create "Done" button
 	Button *pButtonDone = new (std::nothrow) Button();
-	pButtonDone->Construct(Rectangle(50, 510, 150, 74), L"Done");
+	pButtonDone->Construct(Rectangle(50, 230, 150, 74), L"Finish");
 	pButtonDone->SetActionId(ID_BUTTON_POPUP2_DONE);
 	pButtonDone->AddActionEventListener(*this);
-
 	__pPopup2->AddControl(*pButtonDone);
 
-	// Delete button
+	// create "Delete" button
 	Button *pButtonDelete = new (std::nothrow) Button();
-	pButtonDelete->Construct(Rectangle(250, 510, 150, 74), L"Delete");
+	pButtonDelete->Construct(Rectangle(250, 230, 150, 74), L"Delete");
 	pButtonDelete->SetActionId(ID_BUTTON_POPUP2_DELETE);
 	pButtonDelete->AddActionEventListener(*this);
-
 	__pPopup2->AddControl(*pButtonDelete);
 
-	// Cancel button
+	// create "Cancel" button
 	Button *pButtonCancel = new (std::nothrow) Button();
-	pButtonCancel->Construct(Rectangle(450, 510, 150, 74), L"Cancel");
+	pButtonCancel->Construct(Rectangle(450, 230, 150, 74), L"Cancel");
 	pButtonCancel->SetActionId(ID_BUTTON_POPUP2_CANCEL);
 	pButtonCancel->AddActionEventListener(*this);
-
 	__pPopup2->AddControl(*pButtonCancel);
 }
-
 
 void TizenTodoMainForm::OnActionPerformed(
 		const Tizen::Ui::Control& source, int actionId) {
@@ -190,46 +182,42 @@ void TizenTodoMainForm::OnActionPerformed(
 		ShowPopup(__pPopup);
 		break;
 
+	// go to the "done" scene.
 	case ID_BUTTON_DONE:
 		pSceneManager->GoForward(SceneTransitionId(L"ID_SCNT_2"));
-
 		break;
 
+	// add a todo to todo list.
 	case ID_BUTTON_POPUP_OK:
-		// add todo to list
 		todo = __pEditField->GetText();
 		__pTodosList->Add(new String(todo.GetPointer()));
 		__pListView->UpdateList();
 		HidePopup(__pPopup);
-
 		break;
 
+	// cancel to add new todo.
 	case ID_BUTTON_POPUP_CANCEL:
 		HidePopup(__pPopup);
 		break;
 
+	// move a todo to done list.
 	case ID_BUTTON_POPUP2_DONE:
-		// remove seleted item
-		//__pDataIO->test = todo.GetPointer();
-		//__pDataIO->test2 = todo;
-
-		__pDataIO->test2 = (static_cast<String*>(__pTodosList->GetAt(selectIndexForTodo)))->GetPointer();
+		__pDataIO->selectedDoneWork = (static_cast<String*>(__pTodosList->GetAt(selectIndex)))->GetPointer();
 		HidePopup(__pPopup2);
-		__pTodosList->RemoveAt(selectIndexForTodo);
+		__pTodosList->RemoveAt(selectIndex);
 		__pListView->UpdateList();
-
 		pSceneManager->GoForward(SceneTransitionId(L"ID_SCNT_2"));
-		
 		break;
 
+	// delete selected todo.
 	case ID_BUTTON_POPUP2_DELETE:
-		__pTodosList->RemoveAt(selectIndexForTodo);
+		__pTodosList->RemoveAt(selectIndex);
 		__pListView->UpdateList();
 		HidePopup(__pPopup2);
 		break;
 
+	// cancel to delete or move todo.
 	case ID_BUTTON_POPUP2_CANCEL:
-
 		HidePopup(__pPopup2);
 		break;
 
@@ -238,6 +226,9 @@ void TizenTodoMainForm::OnActionPerformed(
 	}
 }
 
+/*
+ *  When user press back button, go to the before screen.
+ */
 void TizenTodoMainForm::OnFormBackRequested(
 		Tizen::Ui::Controls::Form& source) {
 	UiApp* pApp = UiApp::GetInstance();
@@ -251,7 +242,6 @@ void TizenTodoMainForm::OnSceneActivatedN(
 		Tizen::Base::Collection::IList* pArgs) {
 	// TODO:
 	// Add your scene activate code here
-	AppLog("shingilk: onSceneactivated");
 }
 
 void TizenTodoMainForm::OnSceneDeactivated(
@@ -259,7 +249,6 @@ void TizenTodoMainForm::OnSceneDeactivated(
 		const Tizen::Ui::Scenes::SceneId& nextSceneId) {
 	// TODO:
 	// Add your scene deactivate code here
-	AppLog("OnSceneDeactivated");
 }
 
 void TizenTodoMainForm::ShowPopup(Popup* __pPopup) {
@@ -284,8 +273,8 @@ void TizenTodoMainForm::OnListViewItemStateChanged(
 		Tizen::Ui::Controls::ListItemStatus status) {
 
 	if (status == LIST_ITEM_STATUS_SELECTED) {
-		selectIndexForTodo = index;
-		String* todo = static_cast<String*>(__pTodosList->GetAt(selectIndexForTodo));
+		selectIndex = index;
+		String* todo = static_cast<String*>(__pTodosList->GetAt(selectIndex));
 		__pLabel->SetText(todo->GetPointer());
 		ShowPopup(__pPopup2);
 	}
@@ -296,16 +285,12 @@ void TizenTodoMainForm::OnListViewItemSwept(
 		Tizen::Ui::Controls::SweepDirection direction) {
 }
 
-// IListViewItemProvider
 Tizen::Ui::Controls::ListItemBase* TizenTodoMainForm::CreateItem(
 		int index, int itemWidth) {
 	SimpleItem* pItem = new SimpleItem();
 	AppAssert(pItem);
 
 	String* todo = static_cast<String*>(__pTodosList->GetAt(index));
-	AppLog("CreateItem: String: %ls", todo->GetPointer());
-	AppLog("CreateItem: String: index: %d", index);
-
 
 	pItem->Construct(Dimension(itemWidth, 50), LIST_ANNEX_STYLE_NORMAL);
 

@@ -22,7 +22,7 @@ public:
 	Tizen::Base::String GetDoneWork();
 
 	//static wchar_t* test;
-	static Tizen::Base::String test2;
+	static Tizen::Base::String selectedDoneWork;
 
 private:
 

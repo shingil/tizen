@@ -13,6 +13,10 @@ TizenTodoFormFactory::~TizenTodoFormFactory(void)
 {
 }
 
+/*
+ * Create form instance.
+ */
+
 Tizen::Ui::Controls::Form*
 TizenTodoFormFactory::CreateFormN(const Tizen::Base::String& formId, const Tizen::Ui::Scenes::SceneId& sceneId)
 {
@@ -34,9 +38,6 @@ TizenTodoFormFactory::CreateFormN(const Tizen::Base::String& formId, const Tizen
 		pSceneManager->AddSceneEventListener(sceneId, *pForm);
 		pNewForm = pForm;
 	}
-
-	// TODO:
-	// Add your form creation code here
 
 	return pNewForm;
 }

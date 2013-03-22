@@ -66,7 +66,8 @@ private:
 	Tizen::Ui::Controls::Label *__pLabel;
 	TizenTodoDataIO* __pDataIO;
 
-	int selectIndexForTodo;
+
+	int selectIndex	;
 };
 
 #endif	//_TIZENTODO_MAIN_FORM_H_

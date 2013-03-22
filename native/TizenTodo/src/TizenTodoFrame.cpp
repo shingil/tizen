@@ -18,18 +18,19 @@ TizenTodoFrame::~TizenTodoFrame(void)
 result
 TizenTodoFrame::OnInitializing(void)
 {
-	// Prepare Scene management.
+	// prepare Scene management.
 	SceneManager* pSceneManager = SceneManager::GetInstance();
 	static TizenTodoFormFactory formFactory;
-	static TizenTodoPanelFactory panelFactory;
+
+	// register formfactory.
 	pSceneManager->RegisterFormFactory(formFactory);
-	pSceneManager->RegisterPanelFactory(panelFactory);
+
+	// register scene.
 	pSceneManager->RegisterScene(L"workflow");
 
-	// Goto the scene.
+	// go to the todo scene.
 	result r = pSceneManager->GoForward(SceneTransitionId(L"ID_SCNT_1"));
 
-	// TODO: Add your initialization code here
 	return r;
 }
 
@@ -37,7 +38,6 @@ result
 TizenTodoFrame::OnTerminating(void)
 {
 	result r = E_SUCCESS;
-
 	// TODO:
 	// Add your termination code here
 	return r;
